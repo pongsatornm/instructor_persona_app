@@ -1,3 +1,4 @@
+
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
@@ -19,16 +20,15 @@ st.markdown("""
 
 # กำหนดคำถามสำหรับแต่ละ Persona
 questions = {
-    "Cognitive Architect": [...],  # เติมเหมือนโค้ดต้นฉบับได้เลย
-    "Empathic Communicator": [...],
-    "Relevance Integrator": [...],
-    "Reflective Enabler": [...],
-    "Intrinsic Motivator": [...],
-    "Educational Strategist": [...],
-    "Systemic Challenger": [...]
+    "Cognitive Architect": ["Q1", "Q2", "Q3", "Q4", "Q5"],
+    "Empathic Communicator": ["Q1", "Q2", "Q3", "Q4", "Q5"],
+    "Relevance Integrator": ["Q1", "Q2", "Q3", "Q4", "Q5"],
+    "Reflective Enabler": ["Q1", "Q2", "Q3", "Q4", "Q5"],
+    "Intrinsic Motivator": ["Q1", "Q2", "Q3", "Q4", "Q5"],
+    "Educational Strategist": ["Q1", "Q2", "Q3", "Q4", "Q5"],
+    "Systemic Challenger": ["Q1", "Q2", "Q3", "Q4", "Q5"]
 }
 
-# สี pastel แต่ละ Persona
 persona_colors = {
     "Cognitive Architect": "#AEC6CF",
     "Empathic Communicator": "#FFB347",
@@ -39,7 +39,6 @@ persona_colors = {
     "Systemic Challenger": "#B39EB5"
 }
 
-# สัญลักษณ์แต่ละ Persona
 persona_symbols = {
     "Cognitive Architect": "circle",
     "Empathic Communicator": "square",
@@ -52,7 +51,6 @@ persona_symbols = {
 
 responses = {}
 
-# รับข้อมูลผู้ใช้
 with st.form("persona_form"):
     for idx, (persona, qs) in enumerate(questions.items(), 1):
         st.subheader(f"Axis {idx}: {persona}")
@@ -67,7 +65,6 @@ with st.form("persona_form"):
     submitted = st.form_submit_button("Submit")
 
 if submitted:
-    # คำนวณคะแนนรวม
     result = {}
     for persona in questions.keys():
         total = sum([responses[f"{persona}_Q{i}"] for i in range(1, 6)])
@@ -75,13 +72,11 @@ if submitted:
 
     st.success("แบบสอบถามเสร็จสมบูรณ์!")
 
-    # แสดงผลลัพธ์เป็นตาราง
     st.subheader("คะแนนรวมแต่ละ Persona")
     df_result = pd.DataFrame.from_dict(result, orient='index', columns=['คะแนนรวม']).reset_index()
     df_result.rename(columns={'index': 'Persona'}, inplace=True)
     st.dataframe(df_result, use_container_width=True)
 
-    # วาด Radar Plot
     fig = go.Figure()
 
     for persona in result.keys():
@@ -131,7 +126,6 @@ if submitted:
 
     st.plotly_chart(fig, use_container_width=True)
 
-    # ดาวน์โหลดผลลัพธ์เป็น Excel
     output = BytesIO()
     with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
         df_result.to_excel(writer, index=False, sheet_name='ผลลัพธ์')
